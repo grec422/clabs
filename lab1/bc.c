@@ -8,7 +8,7 @@ int main()
         x=n%2;
         n=(int)(n/2);
         if (x==1){
-            count=count+1
+            count=count+1;
         }
     }
     printf("%d,count");
