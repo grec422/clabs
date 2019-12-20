@@ -27,7 +27,6 @@ int main()
      gets(a);
     reverse_string(a);
     printf("%s\n",a);
-    system("pause");
     return 0;
 }
 
