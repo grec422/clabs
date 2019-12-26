@@ -1,15 +1,14 @@
 #include <stdio.h>
-int main ()
+int main()
 {
-    unsigned int i=1;
-    unsigned int p=0;
-    unsigned int q=0-1;
-    while(i!=0)
+    unsigned int a = 1;
+    int n = 0;
+    while (a !=0)
     {
-        i=i<<1;
-        p=p+1;
+        a=a<<1;
+        n=n+1; 
     }
-    printf("%d\n",p);
-    printf("%u\n",q);
+    printf("the min is %d\n",n);
+    printf("the max is%u\n",a-1);
     return 0;
 }
