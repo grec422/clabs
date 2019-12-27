@@ -8,23 +8,28 @@
 #define MAXVAL 100
 #define BUFSIZE 100
 
+int sp = 0;
+double val[MAXVAL];
+char buf[BUFSIZ];
+int bufp = 0 ;
 
-int getop ( char [] );
-void push (double);
+int getop ( char s[] );
+void push (double f);
 double pop (void);
-
+int getch(void);
+void ungetch( int c);
 
 int main (){
 	int type;
 	double op2;
-	double op3;
+    double op3;
 	char s[MAXOP];
 
 	while ( ( type = getop( s )) != EOF ){
 		switch (type)
 		{
 			case NUMBER:
-				push( atof (s) ); 
+				push( atof (s) );
 				break;
 			
 			case '+':
@@ -59,15 +64,13 @@ int main (){
 				printf("\t%.8g\n",pop());
 				break;
 			default:
-				printf("error:unknown commond %s\n",s);
+				printf("unknown commond %s\n",s);
 				break;
 		}
 	}
 	return 0;
 }
 
-int sp=0;
-double val[MAXVAL];
 void push (double f){
 	if ( f < MAXVAL)
 		val[sp++] = f;
@@ -77,41 +80,44 @@ void push (double f){
 double pop (void){
 	if ( sp > 0)
 		return val[--sp];
-	else printf("error : stack empty!\n");
-    return 0.0;
+	else printf("error : stack empty\n");
+	return 0;
 }
-int getch(void);
-void ungetch(int);
-int getop (char s[] )
-{
+int getop (char s[] ){
 	int i,c;
-
-	while ( (s[0] = c = getch()) == ' ' || c == '\t' )
+	while ( (s[0] = c = getch()) == ' ' || c == '\t' ) 
 	 ;
 	s[1] = '\0';
-	if ( !isdigit(c) && c != '.')
+	if ( !isdigit(c) && c != '.' && c != '-') 
 		return c;
 	i = 0;
-	if ( isdigit (c))
-		while( isdigit(s[++i] = c = getch( )) )
-        ;
+	if ( c == '-' ){
+		if ( isdigit(s[++i] = c = getch() ) || c == '.')
+			s[i] = c;
+		else {
+			if ( c != EOF )
+				ungetch(c);
+		return '-';
+		}
+	}	
+	if ( isdigit(s[i]) ) 
+		while ( isdigit(s[++i] = c = getch()) )
+		;
 	if ( c == '.' )
 		while ( isdigit(s[++i] = c = getch()) )
 		;
 	s[i] = '\0';
-	if ( c != EOF )
-		ungetch(c);
+	if ( c != EOF ) 
+		ungetch( c );
 	return NUMBER;
-    }
-char buf[BUFSIZE];
-int bufp=0;
+}
+
 int getch(void){
 	return (bufp > 0) ? buf[--bufp] : getchar() ;
 }
 
 void ungetch( int c){
-	if ( bufp >= BUFSIZE)
+	if ( bufp >= BUFSIZ)
 		printf("ungetch : too many characters!\n");
-	else
-     buf[bufp++] = c ;
+	else buf[bufp++] = c ;
 }
